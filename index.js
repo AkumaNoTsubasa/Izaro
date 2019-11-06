@@ -1,13 +1,9 @@
 const Discord = require("discord.js");
-
 const fetch = require('node-fetch');
-
 const math = require('mathjs');
-
-const client = new Discord.Client();
-
 const config = require("./config.json");
 
+const client = new Discord.Client();
 
 client.on("ready", () => {
   console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
@@ -24,10 +20,6 @@ client.on("guildDelete", guild => {
   console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
   client.user.setActivity(`Slaughtering exiles in ${client.guilds.size} servers`);
 });
-
-
-
-
 
 client.on("message", async message => {
 
@@ -64,7 +56,8 @@ client.on("message", async message => {
 
   if(message.content.indexOf(config.prefix) !== 0) return;
 
-  const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
+  const args = message.content.slice(config.prefix.length).trim().split(" ");
+
   const command = args.shift().toLowerCase();
 
   if(command === "ping") {
@@ -109,65 +102,72 @@ client.on("message", async message => {
 		}
 		else
 		{		
-			const fileXX = await fetch('https://api.poe.watch/leagues').then(response => response.json());
-			
-			if (fileXX.some(element => element.name == args[0]))
+			const leagues = await fetch('https://api.poe.watch/leagues').then(response => response.json());
+			if (leagues.some(element => element.name.toLowerCase() == args[0].toLowerCase()))
 			{
-				
-				
+
 				message.delete(1000);
 				
 				const file = await fetch('https://api.poe.watch/get?league='+args[0]+'&category=currency').then(response => response.json());
 				var randomColor = '#' + ("000000" + Math.random().toString(16).slice(2, 8).toUpperCase()).slice(-6);
 				var league=args[0];
-				var Curr = "";
 				args.shift();
 				Currency = args.join(" ");
 				
-				if(Currency=="Chaos" || Currency=="c" || Currency=="C" || Currency=="chaos")
-				{
-					Curr="Chaos Orb";
+				let resultList = [];
+				for(let i = 0; i < file.length; ++i) {
+					let curCurrName = file[i].name;
+					if(curCurrName.toLowerCase().indexOf(Currency.toLowerCase()) > -1)
+					{
+						resultList.push(curCurrName);
+					}
 				}
-				else if(Currency=="Mirror" || Currency=="mirror")
-				{
-					Curr="Mirror of Kalandra";
-				}
-				else 
-				{
-					Curr=Currency;
-				}
-				if(!file.some(element => element.name === Curr))
+
+				if(resultList.length < 0)
 				{ 
 					const PoePriceEmbed = new Discord.RichEmbed()
 					.setColor(randomColor)
-					.setDescription("Sadly there is no currency called **"+Curr+"**. Please check the exact name incl. captital letters like `Mirror of Kalandra` instead of `mirror of kalandra`.")
+					.setDescription("Sadly there is no currency called **" + Currency + "**. Please check the exact name incl. captital letters like `Mirror of Kalandra` instead of `mirror of kalandra`.")
 					.setTimestamp()
-					.setFooter("Requested by: "+message.author.username, message.author.avatarURL);
+					.setFooter("Requested by: " + message.author.username, message.author.avatarURL);
 					message.channel.send(PoePriceEmbed);
 				}
-				else
-				{ 
-					
-					if(Currency=="Chaos" || Currency=="c" || Currency=="C" || Currency=="chaos")
-					{
-						Currency="Chaos Orb";
+				else if(resultList.length > 1) {
+					let curIndex = 0;
+					let relativeIndex; 
+					for(relativeIndex = 0; relativeIndex < 5; ++relativeIndex) { 
+						if(relativeIndex > (resultList.length - curIndex)) {
+							break;
+						}
 					}
-					if(Currency=="Mirror" || Currency=="mirror")
-					{
-						Currency="Mirror of Kalandra";
+					let results = [];
+					for(; curIndex < resultList.length - curIndex; ++curIndex) {
+						results.push(resultList[curIndex]);
 					}
-					
-					let curr = file.find(element => element.name === Currency)
-					
-					
-					
-					
+
 					const PoePriceEmbed = new Discord.RichEmbed()
 					.setColor(randomColor)
-					.setDescription("**"+curr.name + "** has currently a value of **"+ curr.median.toFixed(2) + "** Chaos Orbs or **" +curr.exalted.toFixed(3)+ "** Exalted Orbs in the **"+league+"** league.")
+					.setDescription("There has been " + resultList.length + " found.\n" + results.forEach(i => {
+						return (i + '\n');
+					}))
+					.setTimestamp()
+					.setFooter("Requested by: " + message.author.username, message.author.avatarURL);
+					message.channel.send(PoePriceEmbed);
+					// Add cool reactions here
+					// Await for user reaction
+					// this code should run in a loop ! so that curIndex can increment and decrement depending on user input.
+				}
+
+				else
+				{ 
+					let curr = file.find(element => element.name.toLowerCase() === resultList[0].toLowerCase());
+					const PoePriceEmbed = new Discord.RichEmbed()
+					.setColor(randomColor)
+					.setDescription("**" + curr.name + "** has currently a value of **"+ curr.median.toFixed(2) + "** Chaos Orbs or **" +
+					 	curr.exalted.toFixed(3) + "** Exalted Orbs in the **" + league + "** league.")
 					.setThumbnail(curr.icon)
 					.setTimestamp()
-					.setFooter("Requested by: "+message.author.username, message.author.avatarURL);
+					.setFooter("Requested by: " + message.author.username, message.author.avatarURL);
 					message.channel.send(PoePriceEmbed);
 				}
 			}
