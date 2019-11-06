@@ -150,7 +150,7 @@ client.on("message", async message => {
 
 					const PoePriceEmbed = new Discord.RichEmbed()
 					.setColor(randomColor)
-					.setDescription("There has been " + resultList.length + " found.\n" + curString);
+					.setDescription("There has been " + resultList.length + " found.\n" + curString)
 					.setTimestamp()
 					.setFooter("Requested by: " + message.author.username, message.author.avatarURL);
 					message.channel.send(PoePriceEmbed);
