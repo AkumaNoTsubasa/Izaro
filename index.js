@@ -119,7 +119,9 @@ client.on("message", async message => {
 					let curCurrName = file[i].name;
 					if(curCurrName.toLowerCase().indexOf(Currency.toLowerCase()) > -1)
 					{
-						resultList.push(curCurrName);
+						if(Currency.toLowerCase().indexOf("shard") < 0 || curCurrName.toLowerCase().indexOf("shard") < 0) { 
+							resultList.push(curCurrName);
+						}
 					}
 				}
 
