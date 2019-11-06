@@ -123,7 +123,7 @@ client.on("message", async message => {
 					}
 				}
 
-				if(resultList.length < 0)
+				if(resultList.length < 1)
 				{ 
 					const PoePriceEmbed = new Discord.RichEmbed()
 					.setColor(randomColor)
@@ -144,12 +144,13 @@ client.on("message", async message => {
 					for(; curIndex < resultList.length - curIndex; ++curIndex) {
 						results.push(resultList[curIndex]);
 					}
+					let curString;
+					
+					results.forEach(currency => { curString += currency + "\n"; });
 
 					const PoePriceEmbed = new Discord.RichEmbed()
 					.setColor(randomColor)
-					.setDescription("There has been " + resultList.length + " found.\n" + results.forEach(i => {
-						return (i + '\n');
-					}))
+					.setDescription("There has been " + resultList.length + " found.\n" + curString);
 					.setTimestamp()
 					.setFooter("Requested by: " + message.author.username, message.author.avatarURL);
 					message.channel.send(PoePriceEmbed);
@@ -161,6 +162,7 @@ client.on("message", async message => {
 				else
 				{ 
 					let curr = file.find(element => element.name.toLowerCase() === resultList[0].toLowerCase());
+					league[0] = league[0].toUpperCase();
 					const PoePriceEmbed = new Discord.RichEmbed()
 					.setColor(randomColor)
 					.setDescription("**" + curr.name + "** has currently a value of **"+ curr.median.toFixed(2) + "** Chaos Orbs or **" +
