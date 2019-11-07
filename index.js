@@ -117,6 +117,7 @@ client.on("message", async message => {
 				let resultList = [];
 				for(let i = 0; i < file.length; ++i) {
 					let curCurrName = file[i].name;
+					let curIcon = file[i].icon; // read icon from api
 					if(curCurrName.toLowerCase().indexOf(Currency.toLowerCase()) > -1)
 					{
 						if(Currency.toLowerCase().indexOf("shard") === -1) { 
@@ -161,13 +162,14 @@ client.on("message", async message => {
 					}
 					else
 					{
-						results.forEach(currency => { curString += currency + "\n"; });  
+						//results.forEach(curIcon => { curString += curIcon + " "; }); // trying to add icon here later for now output its url 
+						results.forEach(currency => { curString +=  currency + "\n"; });  
 						//First item malformatted. If search for "alt" predicted output "Orb of Alteration" and "Exalted Orb". Orb of Alteration is an undefined result. XCur1 
 					}
 					
 					const PoePriceEmbed = new Discord.RichEmbed()
 					.setColor(randomColor)
-					.setDescription("There has been " + resultList.length + " found.\n" + curString)
+					.setDescription("Found " + resultList.length + " items.\n" + curString)
 					.setTimestamp()
 					.setFooter("Requested by: " + message.author.username, message.author.avatarURL);
 					message.channel.send(PoePriceEmbed);
