@@ -153,10 +153,18 @@ client.on("message", async message => {
 					for(; curIndex < resultList.length - curIndex; ++curIndex) {
 						results.push(resultList[curIndex]);
 					}
-					let curString;
+					let curString=""; //first item undefined if not set to any value ref XCur1
 					
-					results.forEach(currency => { curString += currency + "\n"; });
-
+					if(resultList.length>10)
+					{
+						curString = "Too many results";
+					}
+					else
+					{
+						results.forEach(currency => { curString += currency + "\n"; });  
+						//First item malformatted. If search for "alt" predicted output "Orb of Alteration" and "Exalted Orb". Orb of Alteration is an undefined result. XCur1 
+					}
+					
 					const PoePriceEmbed = new Discord.RichEmbed()
 					.setColor(randomColor)
 					.setDescription("There has been " + resultList.length + " found.\n" + curString)
