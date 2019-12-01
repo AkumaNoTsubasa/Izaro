@@ -12,8 +12,8 @@ With Failsafe Checks. Needs Rework, see priority 1.
 ++leagues
 Shows all currently active leagues. Excludes already finished leagues, privates leagues and SSF-Versions as they have no need to be listed.
 
-++ulab/++mlab/++clab/++nlab
-Shows the current Lab-Layout for the chosen lab. Will be reworked to be ++lab "version" to not to maintain 4 copies of the same command.
+++lab normal/curel/merciless/uber
+Shows the current lablayout incl. the corresponding compass file 
 
 
 To do list:

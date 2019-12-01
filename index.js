@@ -388,30 +388,17 @@ client.on("message", async message => {
 				message.channel.send("Here is a list of all currently running leagues. Please note that *SSF* Leagues and private leagues are not listed.\nCurrent Leagues are: \n" + LigaListe);
 	}
 	
-	if(command==="ulab")
+	if(command==="ulab" || command==="mlab" || command==="clab" || command==="nlab")
 	{
 		message.delete(1000);
-		if(dateFormat(now,"HH")<1)
-		{
-			var now = new Date();
-			now.setDate(now.getDate()-1);
-		}
-		else
-		{
-			var now = new Date();
-		}
-		const dateiname=dateFormat(now, "isoDate");
-		const ulabdatei="https://www.poelab.com/wp-content/labfiles/" + dateiname + "_uber.jpg";
-		const labfile = "https://www.poelab.com/wp-content/labfiles/uber-" + dateiname + ".json";
 		const UlabEmbed = new Discord.RichEmbed()
 		.setColor(randomColor)
-		.setDescription("Lab Compass File: " + labfile)
-		.setImage(ulabdatei)
+		.setDescription("This command has changed. It is now `++lab VERSION` like `++lab uber`")
 		.setTimestamp()
 		.setFooter("Requested by: " + message.author.username, message.author.avatarURL);
 		message.channel.send(UlabEmbed);
 	}
-	if(command==="mlab")
+	if(command==="lab")
 	{
 		message.delete(1000);
 		if(dateFormat(now,"HH")<1)
@@ -424,54 +411,8 @@ client.on("message", async message => {
 			var now = new Date();
 		}
 		const dateiname=dateFormat(now, "isoDate");
-		const ulabdatei="https://www.poelab.com/wp-content/labfiles/" + dateiname + "_merciless.jpg";
-		const labfile = "https://www.poelab.com/wp-content/labfiles/merciless-" + dateiname + ".json";
-		const UlabEmbed = new Discord.RichEmbed()
-		.setColor(randomColor)
-		.setDescription("Lab Compass File: " + labfile)
-		.setImage(ulabdatei)
-		.setTimestamp()
-		.setFooter("Requested by: " + message.author.username, message.author.avatarURL);
-		message.channel.send(UlabEmbed);
-	}
-	if(command==="clab")
-	{
-		message.delete(1000);
-		if(dateFormat(now,"HH")<1)
-		{
-			var now = new Date();
-			now.setDate(now.getDate()-1);
-		}
-		else
-		{
-			var now = new Date();
-		}
-		const dateiname=dateFormat(now, "isoDate");
-		const ulabdatei="https://www.poelab.com/wp-content/labfiles/" + dateiname + "_cruel.jpg";
-		const labfile = "https://www.poelab.com/wp-content/labfiles/cruel-" + dateiname + ".json";
-		const UlabEmbed = new Discord.RichEmbed()
-		.setColor(randomColor)
-		.setDescription("Lab Compass File: " + labfile)
-		.setImage(ulabdatei)
-		.setTimestamp()
-		.setFooter("Requested by: " + message.author.username, message.author.avatarURL);
-		message.channel.send(UlabEmbed);
-	}
-	if(command==="nlab")
-	{
-		message.delete(1000);
-		if(dateFormat(now,"HH")<1)
-		{
-			var now = new Date();
-			now.setDate(now.getDate()-1);
-		}
-		else
-		{
-			var now = new Date();
-		}
-		const dateiname=dateFormat(now, "isoDate");
-		const ulabdatei="https://www.poelab.com/wp-content/labfiles/" + dateiname + "_normal.jpg";
-		const labfile = "https://www.poelab.com/wp-content/labfiles/normal-" + dateiname + ".json";
+		const ulabdatei="https://www.poelab.com/wp-content/labfiles/" + dateiname + "_"+args[0]+".jpg";
+		const labfile = "https://www.poelab.com/wp-content/labfiles/"+args[0]+"-" + dateiname + ".json";
 		const UlabEmbed = new Discord.RichEmbed()
 		.setColor(randomColor)
 		.setDescription("Lab Compass File: " + labfile)
