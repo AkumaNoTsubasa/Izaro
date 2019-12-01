@@ -3,6 +3,19 @@
 
 Strictly closed source
 
+Current important Commands
+
+++price "league" "currency"
+Check the chosen league for the currency to see what it is currently worth
+With Failsafe Checks. Needs Rework, see priority 1.
+
+++leagues
+Shows all currently active leagues. Excludes already finished leagues, privates leagues and SSF-Versions as they have no need to be listed.
+
+++ulab/++mlab/++clab/++nlab
+Shows the current Lab-Layout for the chosen lab. Will be reworked to be ++lab "version" to not to maintain 4 copies of the same command.
+
+
 To do list:
 
 Top Priority
