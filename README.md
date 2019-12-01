@@ -14,7 +14,7 @@ Top Priority
 
 QoL
 
-1. Making the Botstatus only change on start-up and once every minute, so we don't send too much queries when the bot gets put/kicked from too many servers quick
+~~1. Making the Botstatus only change on start-up and once every minute, so we don't send too much queries when the bot gets put/kicked from too many servers quick~~
 2. Make all output in sexy embeds
 3. Add a log function to fetch errors and put them per server in files, to ease up bug fixing
 4. Add role-checks where needed to prevent useless console spam if bot doesn't have the rights to delete a message etc.
