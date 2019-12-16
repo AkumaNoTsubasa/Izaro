@@ -25,8 +25,23 @@ client.on("guildDelete", guild => {
 var minutes = 1
 var interval = minutes * 60 * 1000;
 setInterval(function() {
-    client.user.setActivity(`Slaughtering exiles in ${client.guilds.size} servers`);
+    
+	var nummer;
+	var izarostatus = [
+	  "Slaughtering exiles in " + client.guilds.size + " servers",
+	  "++help", 
+	  "++leagues",
+	  "++price LEAGUE Currency",
+	  "++lab uber"
+	  ];
+	var low = 0;
+	var high = izarostatus.length;
+
+	nummer = Math.floor(Math.random() * (high - low) + low);
+	client.user.setActivity(izarostatus[nummer]);	
+	//client.user.setActivity(`Slaughtering exiles in ${client.guilds.size} servers`);
 }, interval);
+
 
 client.on("message", async message => {
 
@@ -83,7 +98,7 @@ client.on("message", async message => {
 	}
 	if(command==="help")
 	{
-		message.channel.send('I am currently in the works and in an early alpha-status. \n\nMy current commands are: `'+config.prefix+'price`, `'+config.prefix+'nlab`, `'+config.prefix+'clab`, `'+config.prefix+'mlab`, `'+config.prefix+'ulab`, . \n\nI have also some not yet public shown commands as they might result in weird behaviour. If you have any questions, you can message `Akuma no Tsubasa#0001`\n\nIf you need further help, you can request a Serverinvite to the Support Server with `'+config.prefix+'support`.');
+		message.channel.send('I am currently in the works and in an early alpha-status. \n\nMy current commands are: `'+config.prefix+'price`, `'+config.prefix+'lab [normal/cruel/merciless/uber]`, `'+config.prefix+'leagues`. \n\nI have also some not yet public shown commands as they might result in weird behaviour. If you have any questions, you can message `Akuma no Tsubasa#0001`\n\nIf you need further help, you can request a Serverinvite to the Support Server with `'+config.prefix+'support`.');
 	}
 
 	
@@ -110,15 +125,11 @@ client.on("message", async message => {
 		else
 		{		
 			const leagues = await fetch('https://api.poe.watch/leagues').then(response => response.json());
-			console.log(args);
 			var leaguenameX = args[0];
 			leaguenameX += " ";
 			leaguenameX += args[1];
 			var leaguenameY = args[0];
-			
-							console.log("leaguenameX: "+leaguenameX);
-							
-							
+			//HC Check 
 			if (leagues.some(element => element.name.toLowerCase() == leaguenameX.toLowerCase()) && leagues.some(element => element.active == true))
 			{
 
@@ -129,8 +140,6 @@ client.on("message", async message => {
 				var league=leaguenameX;
 				//args.slice(3, args.length);
 				Currency = args.slice(2, args.length).join(' ');
-				console.log(Currency);
-				
 				let resultList = [];
 				for(let i = 0; i < file.length; ++i) {
 					let curCurrName = file[i].name;
@@ -171,7 +180,7 @@ client.on("message", async message => {
 					for(; curIndex < resultList.length; curIndex++) {
 						results.push(resultList[curIndex]);
 					}
-					let curString=""; //first item undefined if not set to any value ref XCur1
+					let curString="";
 					
 					if(resultList.length>10)
 					{
@@ -179,9 +188,9 @@ client.on("message", async message => {
 					}
 					else
 					{
-						//results.forEach(curIcon => { curString += curIcon + " "; }); // trying to add icon here later for now output its url 
+						
 						results.forEach(currency => { curString +=  currency + "\n"; });  
-						//First item malformatted. If search for "alt" predicted output "Orb of Alteration" and "Exalted Orb". Orb of Alteration is an undefined result. XCur1 
+						 
 					}
 					
 					const PoePriceEmbed = new Discord.RichEmbed()
@@ -209,7 +218,7 @@ client.on("message", async message => {
 					message.channel.send(PoePriceEmbed);
 				}
 			}
-			//Hardcore Check 
+			//Standard Check 
 			else if(leagues.some(element => element.name.toLowerCase() == leaguenameY.toLowerCase() && leagues.some(element => element.active == true)))
 			{
 
@@ -262,8 +271,6 @@ client.on("message", async message => {
 					results.push(resultList[curIndex]);
 					}
 					var curString=""; //first item undefined if not set to any value ref XCur1
-					console.log( results );
-					console.log( resultList );
 					if(resultList.length>10)
 					{
 						curString = "Too many results";
@@ -310,15 +317,28 @@ client.on("message", async message => {
 				var now = new Date().getTime;
 				while (x < file.length)
 				{
-					if(file[x].active == true)
+					if(file[x].active == true || file[x].upcoming== true)
 					{
-						if(!file[x].end)
+						if(!file[x].end && file[x].upcoming == false)
 						{
 							//LeagueName = file[x].name;
-							LigaListe += y +": "+ file[x].name +"\n ";
+							LigaListe += y +": "+ file[x].name +"\n";
 							x++;
 							y++;
 
+						}
+						else if(!file[x].end && file[x].upcoming == true)
+						{
+							var leagueend = new Date(file[x].start).getTime();
+							var now = new Date().getTime();
+							var timespan = leagueend - now;
+							var days = Math.floor(timespan / (1000 * 60 * 60 * 24));
+							var hours = Math.floor((timespan % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+							var minutes = Math.floor((timespan % (1000 * 60 * 60)) / (1000 * 60));
+							var seconds = Math.floor((timespan % (1000 * 60)) / 1000);
+							LigaListe += y +": "+ file[x].name +" - Starts in: "+days+" days "+hours+" hours "+minutes+" minutes "+seconds+" seconds.\n";
+							x++;
+							y++;
 						}
 						else
 						{
@@ -330,7 +350,7 @@ client.on("message", async message => {
 							var hours = Math.floor((timespan % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 							var minutes = Math.floor((timespan % (1000 * 60 * 60)) / (1000 * 60));
 							var seconds = Math.floor((timespan % (1000 * 60)) / 1000);
-							LigaListe += y +": "+ file[x].name +" - Ends in: "+days+" days "+hours+" hours "+minutes+" minutes "+seconds+" seconds.\n ";
+							LigaListe += y +": "+ file[x].name +" - Ends in: "+days+" days "+hours+" hours "+minutes+" minutes "+seconds+" seconds.\n";
 							x++;
 							y++;
 						}
@@ -355,15 +375,28 @@ client.on("message", async message => {
 				var now = new Date().getTime;
 				while (x < file.length)
 				{
-					if(file[x].active == true)
+					if(file[x].active == true || file[x].upcoming== true)
 					{
-						if(!file[x].end)
+						if(!file[x].end && file[x].upcoming == false)
 						{
 							//LeagueName = file[x].name;
-							LigaListe += y +": "+ file[x].name +"\n ";
+							LigaListe += y +": "+ file[x].name +"\n";
 							x++;
 							y++;
 
+						}
+						else if(!file[x].end && file[x].upcoming == true)
+						{
+							var leagueend = new Date(file[x].start).getTime();
+							var now = new Date().getTime();
+							var timespan = leagueend - now;
+							var days = Math.floor(timespan / (1000 * 60 * 60 * 24));
+							var hours = Math.floor((timespan % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+							var minutes = Math.floor((timespan % (1000 * 60 * 60)) / (1000 * 60));
+							var seconds = Math.floor((timespan % (1000 * 60)) / 1000);
+							LigaListe += y +": "+ file[x].name +" - Starts in: "+days+" days "+hours+" hours "+minutes+" minutes "+seconds+" seconds.\n";
+							x++;
+							y++;
 						}
 						else
 						{
@@ -375,7 +408,7 @@ client.on("message", async message => {
 							var hours = Math.floor((timespan % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 							var minutes = Math.floor((timespan % (1000 * 60 * 60)) / (1000 * 60));
 							var seconds = Math.floor((timespan % (1000 * 60)) / 1000);
-							LigaListe += y +": "+ file[x].name +" - Ends in: "+days+" days "+hours+" hours "+minutes+" minutes "+seconds+" seconds.\n ";
+							LigaListe += y +": "+ file[x].name +" - Ends in: "+days+" days "+hours+" hours "+minutes+" minutes "+seconds+" seconds.\n";
 							x++;
 							y++;
 						}
