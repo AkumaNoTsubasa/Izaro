@@ -3,6 +3,8 @@ POE Price-Check Bot for Discord
 
 Made Source public as I need help in advancing with developement as I am too new to JS and Node to fix and create more stuff.
 
+Bot Invite: https://top.gg/bot/638458844770598914
+
 Current important Commands
 
 ++price "league" "currency"
