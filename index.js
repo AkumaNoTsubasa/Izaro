@@ -448,8 +448,8 @@ client.on("message", async message => {
 		const labfile = "https://www.poelab.com/wp-content/labfiles/"+args[0]+"-" + dateiname + ".json";
 		const UlabEmbed = new Discord.RichEmbed()
 		.setColor(randomColor)
-		.setDescription("Lab Compass File: " + labfile)
 		.setImage(ulabdatei)
+		.setDescription("Lab Compass File: " + labfile + "\n Image goes here\nLabcompass and Image by https://www.poelab.com")
 		.setTimestamp()
 		.setFooter("Requested by: " + message.author.username, message.author.avatarURL);
 		message.channel.send(UlabEmbed);
