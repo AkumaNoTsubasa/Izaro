@@ -85,9 +85,9 @@ const emitReaction = async (reaction, user) => {
 };
 
 client.on("ready", () => {
-	console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
+	console.log(`Bot has started, with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds.`); 
 
-	client.user.setActivity(`Slaughtering exiles in ${client.guilds.size} servers`);
+	client.user.setActivity(`Slaughtering exiles in ${client.guilds.cache.size} servers`);
 
 	client.on("messageReactionAdd", (reaction, user) => {
 		if (user === client.user) return;
@@ -131,13 +131,13 @@ client.on("message", async message => {
   if(message.guild === null)
   {
 	var randomColor = '#' + ("000000" + Math.random().toString(16).slice(2, 8).toUpperCase()).slice(-6);
-	const exampleEmbed = new Discord.RichEmbed()
+	const exampleEmbed = new Discord.MessageEmbed()
 	.setColor(randomColor)
 	.setTitle('New DM from ' + message.author.id)
 	//.setURL('https://www.google.de')
-	.setAuthor(message.author.username, message.author.avatarURL)
+	.setAuthor(message.author.username, message.author.avatarURL())
 	//.setDescription('New DM from an User')
-	.setThumbnail(message.author.avatarURL)
+	.setThumbnail(message.author.avatarURL())
 	.addField('DM Content', message.content)
 	.addBlankField()
 	.setTimestamp()
@@ -185,7 +185,7 @@ client.on("message", async message => {
 	
 	if(command==="price") {
 		if (args.length === 0) {
-			message.delete(1000);
+			message.delete({timeout: 1000});
 			const file = await fetch('https://api.poe.watch/get?league=Blight&category=currency').then(response => response.json());
 			var randomColor = '#' + ("000000" + Math.random().toString(16).slice(2, 8).toUpperCase()).slice(-6);
 
@@ -194,12 +194,12 @@ client.on("message", async message => {
 			var currencyname = file[zufallsding].name;
 			var currencyvalue = file[zufallsding].median;
 
-			const PoePriceEmbed = new Discord.RichEmbed()
+			const PoePriceEmbed = new Discord.MessageEmbed()
 				.setColor(randomColor)
 				.setDescription("You did not supply valid arguments, so I am showing you some random currency.\n\n***" + currencyname + "*** has currently a value of ***" + currencyvalue + " Chaos Orbs.***")
 				.setTitle(message.content.substr(0, 256))
 				.setTimestamp()
-				.setFooter(`Requested by: ${message.author.username}`, message.author.avatarURL);
+				.setFooter(`Requested by: ${message.author.username}`, message.author.avatarURL());
 			message.channel.send(PoePriceEmbed);
 		}
 		else {
@@ -247,7 +247,7 @@ client.on("message", async message => {
 
 			if (league) {
 
-				message.delete(1000);
+				message.delete({timeout: 1000});
 
 				const allItems = await fetch(`https://api.poe.watch/get?league=${league.name}&category=currency`).then(response => response.json());
 				const randomColor = '#' + ("000000" + Math.random().toString(16).slice(2, 8).toUpperCase()).slice(-6);
@@ -271,12 +271,12 @@ client.on("message", async message => {
 
 				// no results
 				if (items.length === 0) {
-					const PoePriceEmbed = new Discord.RichEmbed()
+					const PoePriceEmbed = new Discord.MessageEmbed()
 						.setColor(randomColor)
 						.setDescription(`Sadly there is no currency called **${Currency}**.\nPlease use the exact name like \`Mirror of Kalandra\`.`)
 						.setTitle(message.content.substr(0, 256))
 						.setTimestamp()
-						.setFooter(`Requested by: ${message.author.username}`, message.author.avatarURL);
+						.setFooter(`Requested by: ${message.author.username}`, message.author.avatarURL());
 					await message.channel.send(PoePriceEmbed);
 				}
 				// at least one result
@@ -286,26 +286,25 @@ client.on("message", async message => {
 					let item = items.length === 1 ? items[0] : items.find(({ name }) => name.toLowerCase() === Currency.toLowerCase());
 					// if we found an item acording to the rule above, display it's price
 					if (item) {
-						const PoePriceEmbed = new Discord.RichEmbed()
+						const PoePriceEmbed = new Discord.MessageEmbed()
 							.setColor(randomColor)
 							.setDescription("**" + item.name + "** has currently a value of **" + item.median.toFixed(2) + "** Chaos Orbs or **" +
 								item.exalted.toFixed(3) + "** Exalted Orbs in the **" + league.name + "** league.")
 							.setTitle(message.content.substr(0, 256))
 							.setThumbnail(item.icon.replace(/ /g, "%20"))
 							.setTimestamp()
-							.setFooter(`Requested by: ${message.author.username}`, message.author.avatarURL);
+							.setFooter(`Requested by: ${message.author.username}`, message.author.avatarURL());
 						await message.channel.send(PoePriceEmbed);
 					}
 
 					// if we found more than one item, display a list of items too:
 					if (items.length > 1) {
 						const names = items.map(({ name }) => name);
-						console.log(message);
-						const PoePriceEmbed = new Discord.RichEmbed()
+						const PoePriceEmbed = new Discord.MessageEmbed()
 							.setTitle(message.content.substr(0, 256))
 							.setColor(randomColor)
 							.setTimestamp()
-							.setFooter(`Requested by: ${message.author.username}`, message.author.avatarURL);
+							.setFooter(`Requested by: ${message.author.username}`, message.author.avatarURL());
 
 						const maximum = 10;
 						let page = 0;
@@ -470,17 +469,17 @@ client.on("message", async message => {
 	
 	if(command==="ulab" || command==="mlab" || command==="clab" || command==="nlab")
 	{
-		message.delete(1000);
-		const UlabEmbed = new Discord.RichEmbed()
+		message.delete({timeout: 1000});
+		const UlabEmbed = new Discord.MessageEmbed()
 		.setColor(randomColor)
 		.setDescription("This command has changed. It is now `++lab VERSION` like `++lab uber`")
 		.setTimestamp()
-		.setFooter("Requested by: " + message.author.username, message.author.avatarURL);
+		.setFooter("Requested by: " + message.author.username, message.author.avatarURL());
 		message.channel.send(UlabEmbed);
 	}
 	if(command==="lab")
 	{
-		message.delete(1000);
+		message.delete({timeout: 1000});
 		if(dateFormat(now,"HH")<1)
 		{
 			var now = new Date();
@@ -493,12 +492,12 @@ client.on("message", async message => {
 		const dateiname=dateFormat(now, "isoDate");
 		const ulabdatei="https://www.poelab.com/wp-content/labfiles/" + dateiname + "_"+args[0]+".jpg";
 		const labfile = "https://www.poelab.com/wp-content/labfiles/"+args[0]+"-" + dateiname + ".json";
-		const UlabEmbed = new Discord.RichEmbed()
+		const UlabEmbed = new Discord.MessageEmbed()
 		.setColor(randomColor)
 		.setImage(ulabdatei)
 		.setDescription("Lab Compass File: " + labfile + "\n Image goes here\nLabcompass and Image by https://www.poelab.com")
 		.setTimestamp()
-		.setFooter("Requested by: " + message.author.username, message.author.avatarURL);
+		.setFooter("Requested by: " + message.author.username, message.author.avatarURL());
 		message.channel.send(UlabEmbed);
 	}
 });
