@@ -135,9 +135,9 @@ client.on("message", async message => {
 	.setColor(randomColor)
 	.setTitle('New DM from ' + message.author.id)
 	//.setURL('https://www.google.de')
-	.setAuthor(message.author.username, message.author.avatarURL())
+	.setAuthor(message.author.username, message.author.avatarURL({dynamic: true}))
 	//.setDescription('New DM from an User')
-	.setThumbnail(message.author.avatarURL())
+	.setThumbnail(message.author.avatarURL({dynamic: true}))
 	.addField('DM Content', message.content)
 	.addBlankField()
 	.setTimestamp()
@@ -199,7 +199,7 @@ client.on("message", async message => {
 				.setDescription("You did not supply valid arguments, so I am showing you some random currency.\n\n***" + currencyname + "*** has currently a value of ***" + currencyvalue + " Chaos Orbs.***")
 				.setTitle(message.content.substr(0, 256))
 				.setTimestamp()
-				.setFooter(`Requested by: ${message.author.username}`, message.author.avatarURL());
+				.setFooter(`Requested by: ${message.author.username}`, message.author.avatarURL({dynamic: true}));
 			message.channel.send(PoePriceEmbed);
 		}
 		else {
@@ -276,7 +276,7 @@ client.on("message", async message => {
 						.setDescription(`Sadly there is no currency called **${Currency}**.\nPlease use the exact name like \`Mirror of Kalandra\`.`)
 						.setTitle(message.content.substr(0, 256))
 						.setTimestamp()
-						.setFooter(`Requested by: ${message.author.username}`, message.author.avatarURL());
+						.setFooter(`Requested by: ${message.author.username}`, message.author.avatarURL({dynamic: true}));
 					await message.channel.send(PoePriceEmbed);
 				}
 				// at least one result
@@ -293,7 +293,7 @@ client.on("message", async message => {
 							.setTitle(message.content.substr(0, 256))
 							.setThumbnail(item.icon.replace(/ /g, "%20"))
 							.setTimestamp()
-							.setFooter(`Requested by: ${message.author.username}`, message.author.avatarURL());
+							.setFooter(`Requested by: ${message.author.username}`, message.author.avatarURL({dynamic: true}));
 						await message.channel.send(PoePriceEmbed);
 					}
 
@@ -304,7 +304,7 @@ client.on("message", async message => {
 							.setTitle(message.content.substr(0, 256))
 							.setColor(randomColor)
 							.setTimestamp()
-							.setFooter(`Requested by: ${message.author.username}`, message.author.avatarURL());
+							.setFooter(`Requested by: ${message.author.username}`, message.author.avatarURL({dynamic: true}));
 
 						const maximum = 10;
 						let page = 0;
@@ -474,7 +474,7 @@ client.on("message", async message => {
 		.setColor(randomColor)
 		.setDescription("This command has changed. It is now `++lab VERSION` like `++lab uber`")
 		.setTimestamp()
-		.setFooter("Requested by: " + message.author.username, message.author.avatarURL());
+		.setFooter("Requested by: " + message.author.username, message.author.avatarURL({dynamic: true}));
 		message.channel.send(UlabEmbed);
 	}
 	if(command==="lab")
@@ -497,7 +497,7 @@ client.on("message", async message => {
 		.setImage(ulabdatei)
 		.setDescription("Lab Compass File: " + labfile + "\n Image goes here\nLabcompass and Image by https://www.poelab.com")
 		.setTimestamp()
-		.setFooter("Requested by: " + message.author.username, message.author.avatarURL());
+		.setFooter("Requested by: " + message.author.username, message.author.avatarURL({dynamic: true}));
 		message.channel.send(UlabEmbed);
 	}
 });
